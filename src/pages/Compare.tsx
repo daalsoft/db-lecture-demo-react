@@ -609,7 +609,7 @@ FROM customers c
 LEFT JOIN orders o
   ON c.customer_id = o.customer_id
 ORDER BY c.customer_id;`,
-    result: `Oracle은 (+) 연산자가 없는 쪽이 기준, MySQL은 ANSI LEFT JOIN 사용`
+    result: `Oracle은 (+) 좌/우 상관없이 연산자가 없는 쪽이 기준, MySQL은 기준테이블이 왼족이면 ANSI LEFT JOIN 사용`
   },
   {
     no: 44,
@@ -628,7 +628,7 @@ FROM orders o
 RIGHT JOIN customers c
   ON o.customer_id = c.customer_id
 ORDER BY c.customer_id;`,
-    result: `Oracle은 (+) 연산자가 없는 쪽이 기준, MySQL은 RIGHT JOIN 명시 사용`
+    result: `Oracle은 (+) 좌/우 상관없이 연산자가 없는 쪽이 기준, MySQL은 기준테이블이 오른쪽이면 RIGHT JOIN 사용`
   },
   {
     no: 45,
