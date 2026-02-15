@@ -102,6 +102,18 @@ SELECT IFNULL(NULL,0);`,
   },
   {
     no: 10,
+    feature: "NVL2(expr,val1,val2)",
+    oracle: "NVL2",
+    mysql: "IF(expr IS NOT NULL,val1,val2)",
+    example: `-- Oracle
+SELECT NVL2(10 > 5, 'Y', 'N') FROM dual;
+
+-- MySQL
+SELECT IF(10 > 5, 'Y', 'N');`,
+    result: `Y`
+  },
+  {
+    no: 11,
     feature: "조건문",
     oracle: "CASE WHEN ... END",
     mysql: "CASE WHEN ... END",
@@ -109,7 +121,7 @@ SELECT IFNULL(NULL,0);`,
     result: `Y`
   },
   {
-    no: 11,
+    no: 12,
     feature: "조건문 (DECODE vs CASE)",
     oracle: "DECODE(expr, val1, result1, ..., default)",
     mysql: "CASE WHEN ... THEN ... END",
@@ -136,8 +148,8 @@ CASE → 모든 DB 공통
 실무에서는 CASE 사용 권장`
   },
   {
-    no: 12,
-    feature: "현재 날짜",
+    no: 13,
+    feature: "현재 날짜와시간",
     oracle: "SYSDATE",
     mysql: "NOW()",
     example: `SELECT SYSDATE FROM dual;
@@ -145,7 +157,7 @@ SELECT NOW();`,
     result: `2026-02-14 15:30:00 (예시)`
   },
   {
-    no: 13,
+    no: 14,
     feature: "날짜 더하기",
     oracle: "date + 1",
     mysql: "DATE_ADD(date, INTERVAL 1 DAY)",
@@ -154,7 +166,7 @@ SELECT DATE_ADD(NOW(), INTERVAL 1 DAY);`,
     result: `현재 날짜 + 1일`
   },
   {
-    no: 14,
+    no: 15,
     feature: "날짜 차이",
     oracle: "date1 - date2",
     mysql: "DATEDIFF(d1,d2)",
@@ -166,7 +178,7 @@ SELECT DATEDIFF('2026-12-31','2026-01-01');`,
     result: `364`
   },
   {
-    no: 15,
+    no: 16,
     feature: "시간 더하기(1초)",
     oracle: "date + 1/(24*60*60)",
     mysql: "DATE_ADD(date, INTERVAL 1 SECOND)",
@@ -175,7 +187,7 @@ SELECT DATE_ADD(NOW(), INTERVAL 1 SECOND);`,
     result: `현재 시간 + 1초`
   },
   {
-    no: 16,
+    no: 17,
     feature: "시간 차이",
     oracle: "(date1 - date2)*24*60*60",
     mysql: "TIMESTAMPDIFF(SECOND, date2, date1)",
@@ -187,8 +199,8 @@ SELECT TIMESTAMPDIFF(SECOND, '2026-01-01 00:00:00', '2026-01-02 00:00:00');`,
     result: `86400`
   },
   {
-    no: 17,
-    feature: "그 달의 마지막일자",
+    no: 18,
+    feature: "그 달의 마지막날짜",
     oracle: "LAST_DAY(date)",
     mysql: "LAST_DAY(date)",
     example: `-- Oracle
@@ -200,7 +212,7 @@ SELECT LAST_DAY(NOW());`,
 MySQL → 그 달의 마지막일자`
   },  
   {
-    no: 18,
+    no: 19,
     feature: "날짜/시간 포맷",
     oracle: "YYYYMMDDHH24MISS",
     mysql: "%Y%m%d%H%i%s",
@@ -223,7 +235,7 @@ SELECT DATE_FORMAT(NOW(),'%Y%m%d%H%i%s');`,
   `
   },
   {
-    no: 19,
+    no: 20,
     feature: "날짜 → 문자",
     oracle: "TO_CHAR(date,'YYYYMMDD')",
     mysql: "DATE_FORMAT(date,'%Y%m%d')",
@@ -236,7 +248,7 @@ SELECT DATE_FORMAT(NOW(),'%Y%m%d') AS STR_DATE;`,
   result: "Oracle은 TO_CHAR, MySQL은 DATE_FORMAT 사용"
   },
   {
-    no: 20,
+    no: 21,
     feature: "문자 → 날짜",
     oracle: "TO_DATE(str,'YYYYMMDD')",
     mysql: "STR_TO_DATE(str,'%Y%m%d')",
@@ -249,7 +261,7 @@ SELECT STR_TO_DATE('20260214','%Y%m%d') AS DATE_VAL;`,
     result: "Oracle은 TO_DATE, MySQL은 STR_TO_DATE 사용"
   },
   {
-    no: 21,
+    no: 22,
     feature: "숫자 → 문자",
     oracle: "TO_CHAR(number)",
     mysql: "CAST(number AS CHAR) / CONVERT(number, CHAR)",
@@ -265,8 +277,8 @@ SELECT CONVERT(1234, CHAR) AS STR_NUM;`,
   result: "Oracle은 TO_CHAR, MySQL은 CAST 또는 CONVERT 사용"
   },
   {
-    no: 22,
-    feature: "ADD_MONTHS",
+    no: 23,
+    feature: "몇 개월 전/후",
     oracle: "ADD_MONTHS(date,n)",
     mysql: "DATE_ADD(date, INTERVAL n MONTH)",
     example: `-- Oracle
@@ -278,7 +290,7 @@ SELECT DATE_ADD(NOW(), INTERVAL 3 MONTH) AS NEXT_MONTH;`,
   result: "Oracle은 ADD_MONTHS, MySQL은 DATE_ADD + INTERVAL 사용"
   },
   {
-    no: 23,
+    no: 24,
     feature: "ROW 제한",
     oracle: "ROWNUM <= n",
     mysql: "LIMIT n",
@@ -287,7 +299,7 @@ SELECT * FROM emp LIMIT 2;`,
     result: `상위 2행 반환`
   },
   {
-    no: 24,
+    no: 25,
     feature: "ROW_NUMBER (순번 부여)",
     oracle: "ROW_NUMBER() OVER(ORDER BY col)",
     mysql: "ROW_NUMBER() OVER(ORDER BY col)",
@@ -298,7 +310,7 @@ FROM EMP;`,
 동점이어도 고유 번호 생성`
   },
   {
-    no: 25,
+    no: 26,
     feature: "페이징",
     oracle: "OFFSET offset ROWS FETCH NEXT size ROWS ONLY",
     mysql: "LIMIT offset, size 또는 LIMIT size OFFSET offset",
@@ -308,12 +320,31 @@ OFFSET 10 ROWS           -- 10개 행을 건너뛰고 (1~10등 제외)
 FETCH NEXT 5 ROWS ONLY;  -- 다음 5개 행을 가져옴 (11~15등)
 
 -- MySQL
-SELECT * FROM emp LIMIT 10,5;
+SELECT * FROM emp LIMIT 10, 5;
 SELECT * FROM emp LIMIT 5 OFFSET 10;`,
     result: `11~15번째 행`
   },
   {
-    no: 26,
+    no: 27,
+    feature: "총건수(페이징)",
+    oracle: "COUNT(*) OVER()",
+    mysql: "COUNT(*) OVER()",
+    example: `-- ORACLE
+SELECT COUNT(*) OVER() as TOTAL_CNT, a.* FROM emp a
+WHERE dept_id = 1
+ORDER BY emp_id
+OFFSET 10 ROWS          
+FETCH NEXT 5 ROWS ONLY; 
+
+-- MySQL
+SELECT COUNT(*) OVER() as TOTAL_CNT, a.* FROM emp a
+WHERE dept_id = 1
+ORDER BY emp_id
+LIMIT 5 OFFSET 10;`,
+    result: `TOTAL_CNT는 페이징 처리 전 총건수, 11~15번째 행`
+  },
+  {
+    no: 28,
     feature: "문자열 집계",
     oracle: "LISTAGG(name, ',')",
     mysql: "GROUP_CONCAT(name)",
@@ -325,7 +356,7 @@ SELECT GROUP_CONCAT(name) FROM customers;`,
     result: `김철수,이영희,박민수,정수진,최지훈,한지민,오세훈,윤아름`
   },
   {
-    no: 27,
+    no: 29,
     feature: "UPSERT (UPDATE / INSERT)",
     oracle: "MERGE INTO",
     mysql: "INSERT ... ON DUPLICATE KEY UPDATE",
@@ -346,7 +377,7 @@ ON DUPLICATE KEY UPDATE name='kim2';`,
     result: `중복시 UPDATE`
   },
   {
-    no: 28,
+    no: 30,
     feature: "RANK 함수",
     oracle: "RANK() OVER()",
     mysql: "RANK() OVER() (8.0+)",
@@ -356,7 +387,7 @@ FROM emp;`,
     result: `급여 순위 계산`
   },
   {
-    no: 29,
+    no: 31,
     feature: "RANK vs DENSE_RANK",
     oracle: "RANK(), DENSE_RANK()",
     mysql: "RANK(), DENSE_RANK() (8.0+)",
@@ -368,7 +399,7 @@ FROM EMP;`,
 DENSE_RANK → 동점이어도 번호 건너뛰지 않음`
   },
   {
-    no: 30,
+    no: 32,
     feature: "EXISTS",
     oracle: "EXISTS (subquery)",
     mysql: "EXISTS (subquery)",
@@ -380,7 +411,7 @@ WHERE EXISTS (
     result: `조건 만족 시 TRUE`
   },
   {
-    no: 31,
+    no: 33,
     feature: "시퀀스 / 자동증가",
     oracle: "seq.NEXTVAL",
     mysql: "AUTO_INCREMENT",
@@ -401,7 +432,7 @@ VALUES (NOW());`,
     result: `Oracle은 시퀀스 객체 사용, MySQL은 AUTO_INCREMENT 컬럼 속성`
   },
   {
-    no: 32,
+    no: 34,
     feature: "계층형 쿼리",
     oracle: "CONNECT BY PRIOR",
     mysql: "WITH RECURSIVE",
@@ -426,7 +457,7 @@ SELECT * FROM emp_tree;`,
     result: `Oracle 전용 계층 문법, MySQL은 재귀 CTE 사용`
   },
   {
-    no: 33,
+    no: 35,
     feature: "NULL / ''(Empty String)",
     oracle: "'' = NULL",
     mysql: "'' ≠ NULL",
@@ -440,7 +471,7 @@ SELECT col, col IS NULL FROM test;`,
     result: `Oracle은 빈문자열이 NULL 처리, MySQL은 다름 (대형 이슈)`
   },
   {
-    no: 34,
+    no: 36,
     feature: "DELETE alias",
     oracle: "DELETE FROM orders a",
     mysql: "DELETE FROM orders",
@@ -454,7 +485,7 @@ WHERE status = 'REFUND';`,
     result: `단일 테이블 DELETE는 유사, alias 사용 차이`
   },
   {
-    no: 35,
+    no: 37,
     feature: "JOIN DELETE",
     oracle: "DELETE + SUBQUERY",
     mysql: "DELETE JOIN",
@@ -477,7 +508,7 @@ WHERE c.grade = 'VIP';`,
     result: `MySQL은 JOIN 직접 삭제 가능`
   },
   {
-    no: 36,
+    no: 38,
     feature: "UPDATE JOIN",
     oracle: "UPDATE (SELECT ...)",
     mysql: "UPDATE JOIN",
@@ -500,7 +531,7 @@ WHERE A.status = 'REFUND';`,
     result: `Oracle은 Inline View UPDATE, MySQL은 JOIN UPDATE 직접 지원`
   },
   {
-    no: 37,
+    no: 39,
     feature: "이전 값 (LAG)",
     oracle: "LAG() OVER()",
     mysql: "LAG() OVER()",
@@ -514,7 +545,7 @@ FROM orders;`,
     result: `Oracle / MySQL 8.0 이상 동일 지원`
   },
   {
-    no: 38,
+    no: 40,
     feature: "다음 값 (LEAD)",
     oracle: "LEAD() OVER()",
     mysql: "LEAD() OVER()",
@@ -528,7 +559,7 @@ FROM orders;`,
     result: `동일 (MySQL 8.0 이상)`
   },
   {
-    no: 39,
+    no: 41,
     feature: "PARTITION 기준 LAG/LEAD",
     oracle: "PARTITION BY",
     mysql: "PARTITION BY",
@@ -545,24 +576,24 @@ FROM orders;`,
     result: `그룹별 이전/다음 값 동일 지원`
   },
   {
-    no: 40,
+    no: 42,
     feature: "NULL 정렬 차이",
-    oracle: "NULLS FIRST",
-    mysql: "ORDER BY col IS NULL",
+    oracle: "ORDER BY col desc",
+    mysql: "ORDER BY col IS NOT NULL, col desc",
     example: `-- ORACLE
 SELECT *
 FROM orders
-ORDER BY order_amount;
+ORDER BY customer_phone DESC; -- NULL이 앞에 온다
 
 -- MYSQL
 SELECT *
 FROM orders
-ORDER BY order_amount IS NULL,
-         order_amount DESC;`,
-    result: `Oracle은 NULLS FIRST/LAST 지원, MySQL은 조건식으로 우회`
+ORDER BY customer_phone IS NOT NULL, -- 또는, case when customer_phone IS NULL then 0 else 1 end,
+         customer_phone DESC;`,
+    result: `Oracle은 NULL이 앞에 온다, MySQL은 조건식으로 우회`
   },
   {
-    no: 41,
+    no: 43,
     feature: "(+) LEFT OUTER JOIN",
     oracle: "WHERE col = col(+)",
     mysql: "LEFT JOIN ... ON",
@@ -581,7 +612,7 @@ ORDER BY c.customer_id;`,
     result: `Oracle은 (+) 연산자가 없는 쪽이 기준, MySQL은 ANSI LEFT JOIN 사용`
   },
   {
-    no: 42,
+    no: 44,
     feature: "(+) RIGHT OUTER JOIN",
     oracle: "WHERE col(+) = col",
     mysql: "RIGHT JOIN ... ON",
@@ -598,6 +629,40 @@ RIGHT JOIN customers c
   ON o.customer_id = c.customer_id
 ORDER BY c.customer_id;`,
     result: `Oracle은 (+) 연산자가 없는 쪽이 기준, MySQL은 RIGHT JOIN 명시 사용`
+  },
+  {
+    no: 45,
+    feature: "스칼라서브쿼리 vs 인라인뷰 비교",
+    oracle: "SELECT (SELECT 단일행/단일컬럼 ...)",
+    mysql: "SELECT (SELECT 단일행/단일컬럼 ...)",
+    example: `
+-- 스칼라 서브쿼리(Scalar Sebquery)
+SELECT a.dept_name, (select COUNT(*) from emp where dept_id = a.dept_id) as emp_cnt  
+FROM dept a
+;
+
+-- 인라인 뷰(Inline View)
+SELECT a.dept_name, count(b.dept_id) as emp_cnt  
+FROM dept a
+left join emp b on a.dept_id = b.dept_id
+group by a.dept_name;`,
+    result: `결과는 동일`
+  },
+  {
+    no: 46,
+    feature: "스칼라서브쿼리(단일행 조건)",
+    oracle: "SELECT (SELECT ... WHERE ROWNUM = 1)",
+    mysql: "SELECT (SELECT ... LIMIT 1)",
+    example: `
+-- ORACLE
+SELECT a.dept_name, (select emp_name from emp where dept_id = a.dept_id and rownum = 1) as emp_name
+FROM dept a
+;
+
+-- MySQL
+SELECT a.dept_name, (select emp_name from emp where dept_id = a.dept_id limit 1) as emp_name
+FROM dept a;`,
+    result: `결과는 동일`
   }
 ];
 
