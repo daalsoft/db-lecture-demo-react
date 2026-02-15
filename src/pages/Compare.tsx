@@ -696,8 +696,16 @@ const Compare: React.FC = () => {
                 >
                   <td>{row.no}</td>
                   <td>{row.feature}</td>
-                  <td><code>{row.oracle}</code></td>
-                  <td><code>{row.mysql}</code></td>
+                  <td>
+                    <pre style={{ margin: 0 }}>
+                      {row.oracle}
+                    </pre>
+                  </td>                  
+                  <td>
+                    <pre style={{ margin: 0 }}>
+                      {row.mysql}
+                    </pre>
+                  </td>
                 </tr>
 
                 {openRow === row.no && (

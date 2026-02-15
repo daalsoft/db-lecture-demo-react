@@ -78,6 +78,35 @@ table {
   border-radius: 4px;
 }
 
+.word-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.word-table th {
+  background: #1f2937;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.word-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.word-table tr:nth-child(even) {
+  background: #f3f4f6;
+}
+
+.word-table code {
+  background: #eef2ff;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
 .clickable-row {
   cursor: pointer;
   transition: 0.2s;
@@ -96,4 +125,37 @@ table {
   margin: 0;
   padding: 15px;
   overflow-x: auto;
+}
+
+.lecture-container {
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+  font-family: Consolas, monospace;
+}
+
+.accordion-item {
+  border: 1px solid #ddd;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.accordion-header {
+  background: #1f2937;
+  color: white;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.accordion-header:hover {
+  background: #374151;
+}
+
+.accordion-content {
+  background: #f9fafb;
+  padding: 12px;
+  white-space: pre-line;
+  margin: 0;
 }
